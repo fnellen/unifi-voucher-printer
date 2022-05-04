@@ -7,6 +7,7 @@ from decouple import config
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # https://github.com/Art-of-WiFi/UniFi-API-client/blob/cbe89d913cc4dd3742d5fd35e201ec86bc8ccdc9/src/Client.php#L1919
+# https://rtyley.github.io/bfg-repo-cleaner/
 
 
 class UniFiVoucher:
