@@ -3,7 +3,10 @@ import requests
 import json
 import urllib3
 from pprint import pprint
+from decouple import config
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+# https://github.com/Art-of-WiFi/UniFi-API-client/blob/cbe89d913cc4dd3742d5fd35e201ec86bc8ccdc9/src/Client.php#L1919
 
 
 class Voucher:
@@ -58,8 +61,8 @@ class UbiquitiClient:
         url = f"https://{self.gateway['ip']}/{loginUrl}"
         # set username and password
         body = {
-            "username": "***REMOVED***",
-            "password": "***REMOVED***"
+            "username": config("USERNAME"),
+            "password": config("PASSWORD")
         }
         # Open a session for capturing cookies
         session = requests.Session()
@@ -70,7 +73,22 @@ class UbiquitiClient:
         # Get CSRF token from response headers
         return response.headers["X-CSRF-Token"], session
 
-    # https://github.com/Art-of-WiFi/UniFi-API-client/blob/cbe89d913cc4dd3742d5fd35e201ec86bc8ccdc9/src/Client.php#L1919
+    """
+     Create voucher(s)
+     
+     NOTES: please use the retrieveVoucher() method/function to retrieve the newly created voucher(s) by create_time
+     
+     @param int    $minutes   minutes the voucher is valid after activation (expiration time)
+     @param int    $count     number of vouchers to create, default value is 1
+     @param int    $quota     single-use or multi-use vouchers, value '0' is for multi-use, '1' is for single-use,
+                              'n' is for multi-use n times
+     @param string $note      note text to add to voucher when printing
+     @param int    $up        upload speed limit in kbps
+     @param int    $down      download speed limit in kbps
+     @param int    $megabytes data transfer limit in MB
+     @return array containing a single object which contains voucher createtime
+     */
+     """
 
     def createVoucher(self, minutes, count, quota, note, up=None, down=None, megabytes=None):
         createVoucherUrl = f"proxy/network/api/s/default/cmd/hotspot"
