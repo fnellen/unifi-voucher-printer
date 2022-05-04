@@ -6,6 +6,39 @@ from pprint import pprint
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
+class Voucher:
+
+    def __init__(self, id, adminName, code, creationTime, duration, note, speedUp, speedDown, usageQuota, siteId, status, used, statusExipres) -> None:
+        self.id = id
+        self.adminName = adminName
+        self.code = code
+        self.creationTime = creationTime
+        self.duration = duration
+        self.note = note
+        self.speedUp = speedUp
+        self.speedDown = speedDown
+        self.usageQuota = usageQuota
+        self.siteId = siteId
+        self.status = status
+        self.used = used
+        self.statusExipres = statusExipres
+
+    def __init__(self, json):
+        self.id = json["_id"]
+        self.adminName = json["admin_name"]
+        self.code = json["code"]
+        self.creationTime = json["create_time"]
+        self.duration = json["duration"]
+        self.note = json["note"]
+        self.speedUp = json["qos_rate_max_up"]
+        self.speedDown = json["qos_rate_max_down"]
+        self.usageQuota = json["qos_usage_quota"]
+        self.siteId = json["site_id"]
+        self.status = json["status"]
+        self.used = json["used"]
+        self.statusExipres = json["status_expires"]
+
+
 class UbiquitiClient:
     # set up connection parameters in a dictionary
     gateway = {"ip": ""}
@@ -74,7 +107,10 @@ class UbiquitiClient:
         response = self.session.post(url, headers=headers,
                                      data=json.dumps(body), verify=False)
         api_data = response.json()
-        return api_data["data"]
+        vouchers = []
+        for voucher in api_data["data"]:
+            vouchers.append(Voucher(voucher))
+        return vouchers
 
     def revokeVoucher(self, voucherId):
         deleteVoucherUrl = f"proxy/network/api/s/default/cmd/hotspot"
@@ -103,10 +139,5 @@ if __name__ == "__main__":
     # retrieve the voucher
     vouchers = client.retrieveVoucher(voucherCreated[0]["create_time"])
     for voucher in vouchers:
-        print("Voucher ID: " + voucher["_id"])
-        print("Voucher Code: " + voucher["code"])
-        print(voucher["quota"])
-        print(voucher["note"])
-        print(voucher["qos_rate_max_up"])
-        print(voucher["qos_rate_max_down"])
-        print(voucher["qos_usage_quota"])
+        print(voucher.id)
+        print(voucher.code)
