@@ -1,4 +1,6 @@
 from fpdf import FPDF
+from uniFiVouchers import UniFiVoucher
+from decouple import config
 
 
 class VoucherPdfTemplate(FPDF):
@@ -28,8 +30,24 @@ class VoucherPdfTemplate(FPDF):
         self.validity(daysValid, amountDevices)
 
 
-if __name__ == "__main__":
-    pdf = VoucherPdfTemplate(orientation='l', unit='mm', format=(29.0, 62.0))
-    pdf.addVoucher(voucherCode="1234567890",
-                   ssid="Locanda Oca Bianca", daysValid=30, amountDevices=2)
-    pdf.output("voucher.pdf", "F")
+class VoucherPdfGenerator:
+    pdf: VoucherPdfTemplate
+    ssid = config("SSID")
+
+    def __init__(self, ssid):
+        self.pdf = VoucherPdfTemplate(
+            orientation='l', unit='mm', format=(29.0, 62.0))
+        self.ssid = ssid
+
+    def drawVouchers(self, vouchers: UniFiVoucher):
+        for voucher in vouchers:
+            self.appendVoucher(voucherCode=voucher.code,
+                               ssid=self.ssid, daysValid=voucher.duration / 60, amountDevices=voucher.usageQuota)
+        self.exportVoucher()
+
+    def appendVoucher(self, voucherCode, ssid, daysValid, amountDevices):
+        self.pdf.addVoucher(voucherCode=voucherCode,
+                            ssid=ssid, daysValid=daysValid, amountDevices=amountDevices)
+
+    def exportVoucher(self):
+        self.pdf.output("voucher.pdf", "S")
