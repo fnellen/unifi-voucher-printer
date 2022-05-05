@@ -10,21 +10,6 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 class UniFiVoucher:
 
-    def __init__(self, id, adminName, code, creationTime, duration, note, speedUp, speedDown, usageQuota, siteId, status, used, statusExpires) -> None:
-        self.id = id
-        self.adminName = adminName
-        self.code = code
-        self.creationTime = creationTime
-        self.duration = duration
-        self.note = note
-        self.speedUp = speedUp
-        self.speedDown = speedDown
-        self.usageQuota = usageQuota
-        self.siteId = siteId
-        self.status = status
-        self.used = used
-        self.statusExpires = statusExpires
-
     def __init__(self, json: dict):
         self.id = json.get("_id", None)
         self.adminName = json.get("admin_name", None)
@@ -193,15 +178,12 @@ if __name__ == "__main__":
     client = UniFiClient("192.168.1.1", "443")
     # create a voucher
     voucherCreated = client.createVoucher(
-        minutes=4320, count=5, quota=1, note="test 3 days", up=100, down=100, megabytes=100)
-    voucherCreated = client.createVoucher(
-        minutes=2880, count=10, quota=1, note="test 5 days", up=100, down=100, megabytes=100)
+        minutes=4320, count=5, quota=5, note="test 3 days", up=100, down=100, megabytes=100)
     # retrieve the voucher
-    vouchers = client.retrieveAllVouchers()
+    vouchers = client.retrieveVoucher(voucherCreated[0].creationTime)
     for v in vouchers:
         print(v)
-    vouchers = client.retrieveVoucher(voucherCreated[0].creationTime)
     for voucher in vouchers:
         print(voucher.id)
         print(voucher.code)
-        #print("Deleted: " + str(client.revokeVoucher(voucherId=voucher.id)))
+        print("Deleted: " + str(client.revokeVoucher(voucherId=voucher.id)))
