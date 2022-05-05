@@ -23,8 +23,7 @@ class ImgDrawer:
         fnt = ImageFont.truetype('/Library/Fonts/Arial.ttf', 40)
         d = ImageDraw.Draw(img)
         d.text((157, 26), self.ssid, font=fnt, fill=(0, 0, 0))
-        d.text((167, 96), uniFiVoucher.code[: 5] + " " +
-               uniFiVoucher.code[5:], font=fntBold, fill=(0, 0, 0))
+        d.text((167, 96), uniFiVoucher.code, font=fntBold, fill=(0, 0, 0))
         d.text((77, 192), "Valid for " + str(uniFiVoucher.duration / 1440) +
                " days and " + str(uniFiVoucher.usageQuota) + " Devices", font=fnt, fill=(0, 0, 0))
 
