@@ -9,7 +9,7 @@ class UniFiVoucher:
         self.note = json.get("note", None)
         self.speedUp = json.get("qos_rate_max_up", None)
         self.speedDown = json.get("qos_rate_max_down", None)
-        self.usageQuota = json.get("qos_usage_quota", None)
+        self.usageQuota = json.get("quota", None)
         self.siteId = json.get("site_id", None)
         self.status = json.get("status", None)
         self.used = json.get("used", None)

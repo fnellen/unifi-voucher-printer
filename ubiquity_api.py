@@ -19,7 +19,7 @@ class UniFiClient:
         self.gateway["ip"] = str(gatewayIp)
         self.gateway["gatewayPort"] = str(gatewayPort)
         csrf_token, session = self.getCsrfToken()
-        if csrf_token or session is None:
+        if csrf_token is None:
             raise SystemExit("Could not get CSRF token")
         self.csrf_token = csrf_token
         self.session = session
@@ -104,14 +104,11 @@ class UniFiClient:
         }
         response = self.session.post(url, headers=headers,
                                      data=json.dumps(body), verify=False)
-        try:
-            api_data = response.json()
-            vouchers = []
-            for voucher in api_data["data"]:
-                vouchers.append(UniFiVoucher(voucher))
-            return vouchers
-        except requests.exceptions.RequestException as e:
-            raise SystemExit(e)
+        api_data = response.json()
+        vouchers = []
+        for voucher in api_data["data"]:
+            vouchers.append(UniFiVoucher(voucher))
+        return vouchers
 
     def retrieveAllVouchers(self) -> list:
         fetchVoucherUrl = f"proxy/network/api/s/default/stat/voucher"
