@@ -7,3 +7,5 @@ voucher.pdf
 *.jpg
 
 *.png
+
+*.pyc
