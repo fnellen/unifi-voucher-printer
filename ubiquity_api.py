@@ -2,7 +2,6 @@ from http import cookies
 import requests
 import json
 import urllib3
-from pprint import pprint
 from decouple import config
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -25,7 +24,7 @@ class UniFiVoucher:
         self.siteId = siteId
         self.status = status
         self.used = used
-        self.statusExipres = statusExipres
+        self.statusExpires = statusExpires
 
     def __init__(self, json):
         self.id = json["_id"]
