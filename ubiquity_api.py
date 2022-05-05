@@ -38,7 +38,11 @@ class UniFiClient:
     def __init__(self, gatewayIp, gatewayPort) -> None:
         self.gateway["ip"] = str(gatewayIp)
         self.gateway["gatewayPort"] = str(gatewayPort)
-        self.csrf_token, self.session = self.getCsrfToken()
+        csrf_token, session = self.getCsrfToken()
+        if csrf_token or session is None:
+            raise SystemExit("Could not get CSRF token")
+        self.csrf_token = csrf_token
+        self.session = session
 
     def getCsrfToken(self):
         # set REST API headers
@@ -58,7 +62,6 @@ class UniFiClient:
             # login
             response = session.post(url, headers=headers,
                                     data=json.dumps(body), verify=False)
-            response.raise_for_status()
             # Get CSRF token from response headers
             return response.headers["X-CSRF-Token"], session
         except requests.exceptions.HTTPError as err:
@@ -81,7 +84,7 @@ class UniFiClient:
      */
      """
 
-    def createVoucher(self, minutes, count, quota, note, up=None, down=None, megabytes=None):
+    def createVoucher(self, minutes: int, count: int, quota: int, note: str, up: int = None, down: int = None, megabytes: int = None):
         createVoucherUrl = f"proxy/network/api/s/default/cmd/hotspot"
         url = f"https://{self.gateway['ip']}:{self.gateway['port']}/{createVoucherUrl}"
         headers = {
@@ -101,14 +104,13 @@ class UniFiClient:
         try:
             response = self.session.post(url, headers=headers,
                                          data=json.dumps(body), verify=False)
-            response.raise_for_status()
             api_data = response.json()
             vouchers = []
             for voucher in api_data["data"]:
                 vouchers.append(UniFiVoucher(voucher))
             return vouchers
-        except requests.exceptions.HTTPError as err:
-            raise SystemExit(err)
+        except requests.exceptions.RequestException as e:
+            raise SystemExit(e)
 
     def retrieveVoucher(self, create_time):
         fetchVoucherUrl = f"proxy/network/api/s/default/stat/voucher"
@@ -122,15 +124,14 @@ class UniFiClient:
         }
         response = self.session.post(url, headers=headers,
                                      data=json.dumps(body), verify=False)
-        response.raise_for_status()
         try:
             api_data = response.json()
             vouchers = []
             for voucher in api_data["data"]:
                 vouchers.append(UniFiVoucher(voucher))
             return vouchers
-        except requests.exceptions.HTTPError as err:
-            raise SystemExit(err)
+        except requests.exceptions.RequestException as e:
+            raise SystemExit(e)
 
     def retrieveAllVouchers(self) -> list:
         fetchVoucherUrl = f"proxy/network/api/s/default/stat/voucher"
@@ -150,8 +151,8 @@ class UniFiClient:
             for voucher in api_data["data"]:
                 vouchers.append(UniFiVoucher(voucher))
             return vouchers
-        except requests.exceptions.HTTPError as err:
-            raise SystemExit(err)
+        except requests.exceptions.RequestException as e:
+            raise SystemExit(e)
 
     def revokeVoucher(self, voucherId):
         deleteVoucherUrl = f"proxy/network/api/s/default/cmd/hotspot"
@@ -169,17 +170,18 @@ class UniFiClient:
         response.raise_for_status()
         try:
             return True
-        except requests.exceptions.HTTPError as err:
-            raise SystemExit(err)
+        except requests.exceptions.RequestException as e:
+            raise SystemExit(e)
 
 
 if __name__ == "__main__":
-    # create a new client
-    client = UniFiClient("192.168.1.1", "443")
-    # create a voucher
+    client: UniFiClient
+    try:
+        client = UniFiClient("192.168.1.1", "443")
+    except Exception as e:
+        raise SystemExit(e)
     voucherCreated = client.createVoucher(
         minutes=4320, count=5, quota=5, note="test 3 days", up=100, down=100, megabytes=100)
-    # retrieve the voucher
     vouchers = client.retrieveVoucher(voucherCreated[0].creationTime)
     for v in vouchers:
         print(v)
