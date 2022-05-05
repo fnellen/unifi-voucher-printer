@@ -2,3 +2,8 @@
 bfg-1.14.0.jar
 passwords.txt
 .venv/
+voucher.pdf
+
+*.jpg
+
+*.png
