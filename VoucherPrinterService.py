@@ -27,4 +27,4 @@ class VoucherPrinterService:
 if __name__ == '__main__':
     voucherPrinterService = VoucherPrinterService()
     voucherPrinterService.printVouchers(
-        minutes=4320, count=5, quota=3, note="Zimmer 102")
+        minutes=4320, count=1, quota=3, note="Zimmer 102")
