@@ -1,4 +1,4 @@
-from ubiquity_api import UniFiClient
+from ubiquityApi import UniFiClient
 from imgGenerator import ImgDrawer
 from printer import PrinterSpooler
 from decouple import config
