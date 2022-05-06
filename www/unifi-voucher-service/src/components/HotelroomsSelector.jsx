@@ -1,16 +1,13 @@
 import React from "react";
-import { useState } from "react";
 import styles from '../../styles/Home.module.css';
 
 export default function HotelroomsSelector(props) {
-    
-        const [selectedRoom, setSelectedRoom] = useState(0)
 
         const hotelrooms = [[100, 101, 102, 103, 104, 105, 106], [200, 201, 202, 203, 204, 205], [300, 301, 302, 303, 304, 305, 306]]
 
         const handleRoomChange = (value) => {
             console.log(props);
-            props.handleRoomChange(value);
+            props.deliverSelectedRoom(value);
         }
         return (
             <>{
@@ -23,7 +20,8 @@ export default function HotelroomsSelector(props) {
                                     onClick={() => handleRoomChange(room)}>
                                     {room}
                                 </h2>
-                            ))}
+                            ))
+                        }
                     </div>
                 ))
             }</>

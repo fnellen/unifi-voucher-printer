@@ -15,7 +15,7 @@ export default function Home() {
   const handleRoomChange = (value) => {
     setSelectedRoom(value);
     console.log(selectedRoom);
-    setStageIndex(stage + 1);
+    setStageIndex(1);
   }
 
   const handleDaysChange = (value) => {
@@ -24,9 +24,9 @@ export default function Home() {
   }
   let stage;
   if (stageIndex === 0) {
-    stage = <HotelroomsSelector deliverSelectedRoom={handleRoomChange()}/>
+    stage = <HotelroomsSelector deliverSelectedRoom={() => handleRoomChange()}/>
   } else if (stageIndex === 1) {
-    stage = <DurationSelector />
+    stage = <DurationSelector deliverSelectedDuration={() => handleDaysChange()} />
   }
 
   return (
