@@ -21,5 +21,5 @@ class PrinterSpooler:
             elif "Printing was successful" in stderr.decode('utf-8'):
                 print(f"Printing was successful for {voucher.id}")
             else:
-                # print(stderr)
                 print(f"Printing failed for {voucher.id}")
+                raise SystemError(f"Printing failed for {voucher.id}")
