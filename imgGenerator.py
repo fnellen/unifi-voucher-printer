@@ -21,14 +21,15 @@ class ImgDrawer:
     def drawVoucher(self, uniFiVoucher: UniFiVoucher):
         img1 = Image.new(mode="RGB", size=(
             self.width, self.height), color="white")
-        img2 = Image.open("img/voucherLayout.png")
+        img2 = Image.open("img/voucherLayoutV2.png")
         img1.paste(img2, (0, 0))
         fntBold = ImageFont.truetype('/Library/Fonts/Arial Bold.ttf', 60)
         fnt25pt = ImageFont.truetype('/Library/Fonts/Arial.ttf', 25)
         fnt20pt = ImageFont.truetype('/Library/Fonts/Arial.ttf', 20)
 
         d = ImageDraw.Draw(img1)
-        d.text((90, 17), self.ssid, font=fnt25pt, fill=(0, 0, 0))
+        d.text((133, 18), self.ssid, font=fnt25pt, fill=(0, 0, 0))
+        d.text((502, 18), uniFiVoucher.note, font=fnt25pt, fill=(0, 0, 0))
         d.text((64, 80), str(int(uniFiVoucher.duration / 1440)) + " Days",
                font=fnt20pt, fill=(0, 0, 0))
         d.text((64, 142), str(uniFiVoucher.speedUp) + " Kbps",
@@ -56,5 +57,5 @@ class ImgDrawer:
 
 if __name__ == '__main__':
     imgDrawer = ImgDrawer(
-        [UniFiVoucher({"_id": "1", "code": "1234567890", "duration": 4320, "quota": 2, "note": "Zimmer 102", "create_time": 1651831339, "qos_rate_max_up": "1000",  "qos_rate_max_down": "1000"})], "Locanda Oca Bianca")
+        [UniFiVoucher({"_id": "1", "code": "1234567890", "duration": 4320, "quota": 2, "note": "102", "create_time": 1651831339, "qos_rate_max_up": "1000",  "qos_rate_max_down": "1000"})], "Locanda Oca Bianca")
     imgDrawer.drawVouchers()
