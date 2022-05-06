@@ -86,6 +86,7 @@ class UniFiClient:
                                          data=json.dumps(body), verify=False)
             api_data = response.json()
             vouchers = []
+            #vouchers = [UniFiVoucher(x) for x in api_data["data"]]
             for voucher in api_data["data"]:
                 vouchers.append(UniFiVoucher(voucher))
             return vouchers
@@ -102,13 +103,16 @@ class UniFiClient:
         body = {
             "create_time": str(create_time),
         }
-        response = self.session.post(url, headers=headers,
-                                     data=json.dumps(body), verify=False)
-        api_data = response.json()
-        vouchers = []
-        for voucher in api_data["data"]:
-            vouchers.append(UniFiVoucher(voucher))
-        return vouchers
+        try:
+            response = self.session.post(url, headers=headers,
+                                         data=json.dumps(body), verify=False)
+            api_data = response.json()
+            vouchers = []
+            for voucher in api_data["data"]:
+                vouchers.append(UniFiVoucher(voucher))
+            return vouchers
+        except requests.exceptions.RequestException as e:
+            raise SystemExit(e)
 
     def retrieveAllVouchers(self) -> list:
         fetchVoucherUrl = f"proxy/network/api/s/default/stat/voucher"
@@ -119,10 +123,9 @@ class UniFiClient:
         }
         body = {
         }
-        response = self.session.post(url, headers=headers,
-                                     data=json.dumps(body), verify=False)
-        response.raise_for_status()
         try:
+            response = self.session.post(url, headers=headers,
+                                         data=json.dumps(body), verify=False)
             api_data = response.json()
             vouchers = []
             for voucher in api_data["data"]:
@@ -142,27 +145,12 @@ class UniFiClient:
             "_id": voucherId,
             "cmd": "delete-voucher",
         }
-        response = self.session.post(url, headers=headers,
-                                     data=json.dumps(body), verify=False)
-        response.raise_for_status()
         try:
-            return True
+            response = self.session.post(url, headers=headers,
+                                         data=json.dumps(body), verify=False)
+            if response.status_code == 200:
+                return True
+            else:
+                return False
         except requests.exceptions.RequestException as e:
             raise SystemExit(e)
-
-
-if __name__ == "__main__":
-    client: UniFiClient
-    try:
-        client = UniFiClient("192.168.1.1", "443")
-    except Exception as e:
-        raise SystemExit(e)
-    voucherCreated = client.createVoucher(
-        minutes=4320, count=5, quota=5, note="test 3 days", up=100, down=100, megabytes=100)
-    vouchers = client.retrieveVoucher(voucherCreated[0].creationTime)
-    for v in vouchers:
-        print(v)
-    for voucher in vouchers:
-        print(voucher.id)
-        print(voucher.code)
-        print("Deleted: " + str(client.revokeVoucher(voucherId=voucher.id)))
