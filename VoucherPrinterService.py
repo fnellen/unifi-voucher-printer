@@ -1,3 +1,4 @@
+import re
 from ubiquityApi import UniFiClient
 from imgGenerator import ImgDrawer
 from printer import PrinterSpooler
@@ -11,6 +12,7 @@ class VoucherPrinterService:
         self.deviceModel = config('DEVICE_MODEL')
         self.devicePort = config('DEVICE_PORT')
         self.imgSize = config('IMG_SIZE')
+        self.ssid = config('SSID')
         self.printer = PrinterSpooler(
             self.bus, self.deviceModel, self.devicePort, self.imgSize)
         try:
@@ -23,9 +25,13 @@ class VoucherPrinterService:
         voucherCreated = self.client.createVoucher(
             minutes=minutes, count=count, quota=quota, note=note, up=up, down=down, megabytes=megabytes)
         vouchers = self.client.retrieveVoucher(voucherCreated[0].creationTime)
-        imgDrawer = ImgDrawer(vouchers, config('SSID'))
+        imgDrawer = ImgDrawer(vouchers, self.ssid)
         imgDrawer.drawVouchers()
-        self.printer.printImgs(vouchers)
+        try:
+            self.printer.printImgs(vouchers)
+            return True, vouchers
+        except:
+            return False, vouchers
 
 
 if __name__ == '__main__':
