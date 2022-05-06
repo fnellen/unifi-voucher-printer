@@ -25,11 +25,18 @@ def createVoucher():
             print(minutes, count, quota, note, up, down, megabytes)
             if minutes == '' or count == '' or quota == '' or note == '':
                 abort(400)
+            if up is None:
+                up = 5000
+            if down is None:
+                down = 2000
             voucherPrinterService = VoucherPrinterService()
             success, vouchers = voucherPrinterService.printVouchers(
                 minutes=int(minutes), count=int(count), quota=int(quota), note=note, up=up, down=down, megabytes=megabytes)
             if success:
-                return json.dumps(vouchers)
+                resp = {"vouchers": []}
+                for v in vouchers:
+                    resp["vouchers"].append(v.toDict())
+                return json.dumps(resp)
             else:
                 abort(500)
         except KeyError as err:

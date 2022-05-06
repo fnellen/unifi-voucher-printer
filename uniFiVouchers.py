@@ -17,3 +17,20 @@ class UniFiVoucher:
 
     def __str__(self) -> str:
         return f"ID: {self.id}, Created By: {self.adminName}, Code: {self.code}, Created At {self.creationTime}, Valid for: {self.duration}, Note: {self.note}, Upload Speed: {self.speedUp}, Download Speed {self.speedDown}, Quota: {self.usageQuota}, SiteId: {self.siteId}, Status: {self.status}, Used: {self.used}, Status Expires: {self.statusExpires}"
+
+    def toDict(self):
+        return {
+            "id": self.id,
+            "adminName": self.adminName,
+            "code": self.code,
+            "creationTime": self.creationTime,
+            "duration": self.duration,
+            "note": self.note,
+            "speedUp": self.speedUp,
+            "speedDown": self.speedDown,
+            "usageQuota": self.usageQuota,
+            "siteId": self.siteId,
+            "status": self.status,
+            "used": self.used,
+            "statusExpires": self.statusExpires
+        }
