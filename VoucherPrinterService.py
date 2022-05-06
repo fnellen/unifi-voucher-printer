@@ -13,7 +13,11 @@ class VoucherPrinterService:
         self.imgSize = config('IMG_SIZE')
         self.printer = PrinterSpooler(
             self.bus, self.deviceModel, self.devicePort, self.imgSize)
-        self.client = UniFiClient(config('GATEWAY_IP'), config('GATEWAY_PORT'))
+        try:
+            self.client = UniFiClient(
+                config('GATEWAY_IP'), config('GATEWAY_PORT'))
+        except Exception as err:
+            raise SystemExit(err)
 
     def printVouchers(self, minutes, count, quota, note, up=None, down=None, megabytes=None):
         voucherCreated = self.client.createVoucher(
@@ -27,4 +31,4 @@ class VoucherPrinterService:
 if __name__ == '__main__':
     voucherPrinterService = VoucherPrinterService()
     voucherPrinterService.printVouchers(
-        minutes=4320, count=1, quota=3, note="Zimmer 102")
+        minutes=4320, count=1, quota=3, note="Zimmer 102", up=2000, down=5000)
