@@ -24,6 +24,8 @@ class VoucherPrinterService:
     def printVouchers(self, minutes, count, quota, note, up=None, down=None, megabytes=None):
         voucherCreated = self.client.createVoucher(
             minutes=minutes, count=count, quota=quota, note=note, up=up, down=down, megabytes=megabytes)
+        if len(voucherCreated) == 0:
+            return False, []
         vouchers = self.client.retrieveVoucher(voucherCreated[0].creationTime)
         imgDrawer = ImgDrawer(vouchers, self.ssid)
         imgDrawer.drawVouchers()
