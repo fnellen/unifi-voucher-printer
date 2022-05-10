@@ -1,32 +1,82 @@
-import Head from 'next/head'
-import { useState } from 'react'
-import DurationSelector from '../src/components/DurationSelector'
-import HotelroomsSelector from '../src/components/HotelroomsSelector'
-import styles from '../styles/Home.module.css'
+import Head from "next/head";
+import { useState } from "react";
+import DurationSelector from "../src/components/DurationSelector";
+import HotelroomSelector from "../src/components/HotelroomSelector";
+import PrintingNotice from "../src/components/PrintingNotice";
+import styles from "../styles/Home.module.css";
 
 export default function Home() {
-
-  const [selectedRoom, setSelectedRoom] = useState(0)
-  const [days, setDays] = useState(0)
-  const [stageIndex, setStageIndex] = useState(0)
-
-  const hotelrooms = [[100, 101, 102, 103, 104, 105, 106], [200, 201, 202, 203, 204, 205], [300, 301, 302, 303, 304, 305, 306]]
+  const [selectedRoom, setSelectedRoom] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [stageIndex, setStageIndex] = useState(0);
+  const [vouchers, setVouchers] = useState([
+    {
+      "adminName": "",
+      "code": "",
+      "creationTime": 0,
+      "duration": 0,
+      "id": "",
+      "note": "",
+      "siteId": "",
+      "speedDown": "",
+      "speedUp": "",
+      "status": "",
+      "statusExpires": 0,
+      "usageQuota": 0,
+      "used": 0
+    }
+  ]);
 
   const handleRoomChange = (value) => {
     setSelectedRoom(value);
-    console.log(selectedRoom);
     setStageIndex(1);
-  }
+  };
 
   const handleDaysChange = (value) => {
-    setDays(value);
-    console.log(days);
-  }
+    setDuration(value);
+    setStageIndex(2);
+    submitVoucherRequest(selectedRoom, value);
+  };
+
   let stage;
-  if (stageIndex === 0) {
-    stage = <HotelroomsSelector deliverSelectedRoom={() => handleRoomChange()}/>
-  } else if (stageIndex === 1) {
-    stage = <DurationSelector deliverSelectedDuration={() => handleDaysChange()} />
+  switch (stageIndex) {
+    case 0:
+      stage = <HotelroomSelector deliverSelectedRoom={handleRoomChange} />;
+      break;
+    case 1:
+      stage = <DurationSelector deliverSelectedDuration={handleDaysChange} />;
+      break;
+    case 2:
+      stage = <PrintingNotice selectedRoom={selectedRoom} days={duration}/>;
+      break;
+  }
+
+  async function submitVoucherRequest(selectedRoom, duration) {
+    const requestOptions = {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+        "access-control-allow-origin": "localhost:3000",
+      },
+      //agent: httpsAgent,
+    };
+    const minutes = duration * 60 * 24;
+    const response = await fetch("http://localhost:5001/create-voucher?minutes="+ minutes +"&count=1&quota=3&note="+selectedRoom+"&up=5000&down=2000", requestOptions)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json()
+        }
+        return Error("Error: " + response.status);
+      }
+      )
+      .then((data) => {
+        return data.vouchers;
+      })
+      .catch((error) => {
+        throw new Error("Error: " + error);
+      });
+    setVouchers(response);
   }
 
   return (
@@ -38,16 +88,17 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Locanda Oca Bianca Voucher System
-        </h1>
-
-        <div className="container">
-          <h2>Select the hotel room</h2>
-        </div>
-
+        <h1 className={styles.title}>Locanda Oca Bianca Voucher System</h1>
         {stage}
+        {vouchers.map((voucher) => {
+          return (
+            <div key={voucher.id}>
+              <h2>Voucher code for room {voucher.code}</h2>
+            </div>
+          );
+        })
+        }
       </main>
     </div>
-  )
+  );
 }
