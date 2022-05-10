@@ -19,7 +19,7 @@ class VoucherPrinterService:
             self.client = UniFiClient(
                 config('GATEWAY_IP'), config('GATEWAY_PORT'))
         except Exception as err:
-            raise SystemExit(err)
+            raise err
 
     def printVouchers(self, minutes, count, quota, note, up=None, down=None, megabytes=None):
         voucherCreated = self.client.createVoucher(
@@ -34,9 +34,3 @@ class VoucherPrinterService:
             return True, vouchers
         except:
             return False, vouchers
-
-
-if __name__ == '__main__':
-    voucherPrinterService = VoucherPrinterService()
-    voucherPrinterService.printVouchers(
-        minutes=4320, count=1, quota=3, note="Zimmer 102", up=2000, down=5000)
