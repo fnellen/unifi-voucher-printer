@@ -1,0 +1,1 @@
+docker build -t lob-backend:flask .

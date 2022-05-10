@@ -3,6 +3,9 @@
  */
 
 const nextConfig = {
+  experimental: {
+    outputStandalone: true,
+  },
   reactStrictMode: true,
   webpack(config) {
     config.module.rules.push({

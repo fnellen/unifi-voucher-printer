@@ -11,20 +11,20 @@ export default function Home() {
   const [stageIndex, setStageIndex] = useState(0);
   const [vouchers, setVouchers] = useState([
     {
-      "adminName": "",
-      "code": "",
-      "creationTime": 0,
-      "duration": 0,
-      "id": "",
-      "note": "",
-      "siteId": "",
-      "speedDown": "",
-      "speedUp": "",
-      "status": "",
-      "statusExpires": 0,
-      "usageQuota": 0,
-      "used": 0
-    }
+      adminName: "",
+      code: "",
+      creationTime: 0,
+      duration: 0,
+      id: "",
+      note: "",
+      siteId: "",
+      speedDown: "",
+      speedUp: "",
+      status: "",
+      statusExpires: 0,
+      usageQuota: 0,
+      used: 0,
+    },
   ]);
 
   const handleRoomChange = (value) => {
@@ -47,7 +47,7 @@ export default function Home() {
       stage = <DurationSelector deliverSelectedDuration={handleDaysChange} />;
       break;
     case 2:
-      stage = <PrintingNotice selectedRoom={selectedRoom} days={duration}/>;
+      stage = <PrintingNotice selectedRoom={selectedRoom} days={duration} />;
       break;
   }
 
@@ -62,14 +62,20 @@ export default function Home() {
       //agent: httpsAgent,
     };
     const minutes = duration * 60 * 24;
-    const response = await fetch("http://localhost:5001/create-voucher?minutes="+ minutes +"&count=1&quota=3&note="+selectedRoom+"&up=5000&down=2000", requestOptions)
+    const response = await fetch(
+      "http://localhost:5001/create-voucher?minutes=" +
+        minutes +
+        "&count=1&quota=3&note=" +
+        selectedRoom +
+        "&up=5000&down=2000",
+      requestOptions
+    )
       .then((response) => {
         if (response.status === 200) {
-          return response.json()
+          return response.json();
         }
         return Error("Error: " + response.status);
-      }
-      )
+      })
       .then((data) => {
         return data.vouchers;
       })
@@ -96,8 +102,7 @@ export default function Home() {
               <h2>Voucher code for room {voucher.code}</h2>
             </div>
           );
-        })
-        }
+        })}
       </main>
     </div>
   );

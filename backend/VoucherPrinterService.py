@@ -1,4 +1,3 @@
-import re
 from ubiquityApi import UniFiClient
 from imgGenerator import ImgDrawer
 from printer import PrinterSpooler

@@ -1,9 +1,7 @@
-from urllib import response
-from flask import Flask, make_response
+from flask import Flask
 from flask import request
 from VoucherPrinterService import VoucherPrinterService
 from flask import abort
-import json
 from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)

@@ -1,0 +1,16 @@
+version: "3.9"  # optional since v1.27.0
+services:
+  backend:
+    build: 
+      context: . 
+      dockerfile: ./backend/Dockerfile
+    image: lob-backend:flask
+    ports:
+      - "5001:5000"
+  frontend:
+    build: 
+      context: . 
+      dockerfile: ./frontend/Dockerfile
+    image: lob-frontend:nextjs
+    ports:
+      - "3000:3000"
