@@ -1,9 +1,16 @@
 FROM python:3.9.12
 
-COPY backend .
-RUN python3 -m pip install --upgrade pip setuptools wheel
-RUN python3 -m pip install -r requirements.txt
+WORKDIR /app
+
+ENV VIRTUAL_ENV=/opt/venv
+RUN python3 -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
+COPY backend /requirements.txt /app
+RUN pip install -r requirements.txt
+
+COPY backend /app
 
 EXPOSE 5000
 
-CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0" , "--port=5000" ]
+CMD ["python3", "-m" , "flask", "run", "--host=0.0.0.0" , "--port=5000" ]

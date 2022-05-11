@@ -7,8 +7,8 @@ services:
     image: lob-backend:flask
     ports:
       - "5001:5000"
-    devices:
-      - /dev/ttyUSB0:/dev/ttyUSB5
+    # devices:
+    #   - /dev/ttyUSB0:/dev/ttyUSB5
     restart: always
   frontend:
     build: 
