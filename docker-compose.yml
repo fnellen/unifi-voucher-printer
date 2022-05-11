@@ -6,9 +6,9 @@ services:
       dockerfile: ./backend/Dockerfile
     image: lob-backend:flask
     ports:
-      - "5001:5000"
-    # devices:
-    #   - /dev/ttyUSB0:/dev/ttyUSB5
+      - "5000:5000"
+    devices:
+      - /dev/usblp0:/dev/usblp0
     restart: always
   frontend:
     build: 
