@@ -7,6 +7,9 @@ services:
     image: lob-backend:flask
     ports:
       - "5001:5000"
+    devices:
+      - /dev/ttyUSB0:/dev/ttyUSB5
+    restart: always
   frontend:
     build: 
       context: . 
@@ -14,3 +17,4 @@ services:
     image: lob-frontend:nextjs
     ports:
       - "3000:3000"
+    restart: always
