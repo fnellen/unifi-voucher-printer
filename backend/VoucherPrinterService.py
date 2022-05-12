@@ -12,8 +12,11 @@ class VoucherPrinterService:
         self.devicePort = config('DEVICE_PORT')
         self.imgSize = config('IMG_SIZE')
         self.ssid = config('SSID')
-        self.printer = PrinterSpooler(
-            self.bus, self.deviceModel, self.devicePort, self.imgSize)
+        try:
+            self.printer = PrinterSpooler(
+                self.bus, self.deviceModel, self.devicePort, self.imgSize)
+        except:
+            self.printer = None
         try:
             self.client = UniFiClient(
                 config('GATEWAY_IP'), config('GATEWAY_PORT'))
@@ -28,8 +31,10 @@ class VoucherPrinterService:
         vouchers = self.client.retrieveVoucher(voucherCreated[0].creationTime)
         imgDrawer = ImgDrawer(vouchers, self.ssid)
         imgDrawer.drawVouchers()
+        if self.printer == None:
+            return False, "Printer not online", vouchers
         try:
             self.printer.printImgs(vouchers)
-            return True, vouchers
+            return True, None, vouchers
         except:
-            return False, vouchers
+            return False, "Failed printing vouchers", vouchers
