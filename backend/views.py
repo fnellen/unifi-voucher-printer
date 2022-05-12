@@ -4,9 +4,8 @@ from VoucherPrinterService import VoucherPrinterService
 from flask import abort
 from flask_cors import CORS
 app = Flask(__name__)
-CORS(app)
 cors = CORS(app, resources={
-            r"/create-voucher/*": {"origins": "localhost:3000"}})
+            r"/create-voucher/*": {"origins": "http://localhost:3000"}})
 
 
 @app.route("/", methods=['GET'])
