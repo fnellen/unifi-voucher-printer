@@ -3,6 +3,7 @@ from flask import request
 from VoucherPrinterService import VoucherPrinterService
 from flask import abort
 from flask_cors import CORS
+import os
 app = Flask(__name__)
 cors = CORS(app, resources={
             r"/create-voucher/*": {"origins": "http://localhost:3000"}})
@@ -33,12 +34,15 @@ def createVoucher():
             voucherPrinterService = VoucherPrinterService()
             success, ErrorMessage, vouchers = voucherPrinterService.printVouchers(
                 minutes=int(minutes), count=int(count), quota=int(quota), note=note, up=up, down=down, megabytes=megabytes)
-            resp = {"vouchers": [resp["vouchers"].append(
-                v.toDict()) for v in vouchers]}
+            resp = {"vouchers": []}
+            for v in vouchers:
+                resp["vouchers"].append(
+                    v.toDict())
+                os.remove(f'tmp/{v.id}.png')
             if not success:
                 resp["error"] = ErrorMessage
             return resp, 200
         except Exception as err:
-            return {"Fehler": str(err)}, 500
+            return {"error": str(err), "vouchers" : []}, 500
     else:
         abort(400)
