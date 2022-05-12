@@ -31,11 +31,12 @@ def createVoucher():
             if down is None:
                 down = 2000
             voucherPrinterService = VoucherPrinterService()
-            success, vouchers = voucherPrinterService.printVouchers(
+            success, ErrorMessage, vouchers = voucherPrinterService.printVouchers(
                 minutes=int(minutes), count=int(count), quota=int(quota), note=note, up=up, down=down, megabytes=megabytes)
-            resp = {"vouchers": []}
-            for v in vouchers:
-                resp["vouchers"].append(v.toDict())
+            resp = {"vouchers": [resp["vouchers"].append(
+                v.toDict()) for v in vouchers]}
+            if not success:
+                resp["error"] = ErrorMessage
             return resp, 200
         except Exception as err:
             return {"Fehler": str(err)}, 500
