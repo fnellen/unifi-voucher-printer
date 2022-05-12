@@ -1,31 +1,22 @@
+import { Stack } from "@mui/material";
 import Head from "next/head";
 import { useState } from "react";
 import DurationSelector from "../src/components/DurationSelector";
+import ErrorMessage from "../src/components/Errormessage";
 import HotelroomSelector from "../src/components/HotelroomSelector";
 import PrintingNotice from "../src/components/PrintingNotice";
+import Ticket from "../src/components/Ticket";
 import styles from "../styles/Home.module.css";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ClearIcon from '@mui/icons-material/Clear';
 
 export default function Home() {
   const [selectedRoom, setSelectedRoom] = useState(0);
   const [duration, setDuration] = useState(0);
   const [stageIndex, setStageIndex] = useState(0);
-  const [vouchers, setVouchers] = useState([
-    {
-      adminName: "",
-      code: "",
-      creationTime: 0,
-      duration: 0,
-      id: "",
-      note: "",
-      siteId: "",
-      speedDown: "",
-      speedUp: "",
-      status: "",
-      statusExpires: 0,
-      usageQuota: 0,
-      used: 0,
-    },
-  ]);
+  const [fetchError, setFetchError] = useState("");
+  const [printingError, setPrintingError] = useState("");
+  const [vouchers, setVouchers] = useState([]);
 
   const handleRoomChange = (value) => {
     setSelectedRoom(value);
@@ -57,52 +48,83 @@ export default function Home() {
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
-        "access-control-allow-origin": "localhost:3000",
-      },
-      //agent: httpsAgent,
+      }
     };
     const minutes = duration * 60 * 24;
     const response = await fetch(
-      "http://localhost:5000/create-voucher?minutes=" +
-        minutes +
-        "&count=1&quota=3&note=" +
-        selectedRoom +
-        "&up=5000&down=2000",
+      "http://192.168.1.77:5000/create-voucher?minutes=" +
+      minutes +
+      "&count=1&quota=3&note=" +
+      selectedRoom +
+      "&up=5000&down=2000",
       requestOptions
     )
       .then((response) => {
         if (response.status === 200) {
           return response.json();
         }
-        return Error("Error: " + response.status);
+        setFetchError("Something went wrong. Please check your connection.");
+        return;
       })
       .then((data) => {
-        return data.vouchers;
+        return data;
       })
       .catch((error) => {
-        throw new Error("Error: " + error);
+        setFetchError(error.message);
       });
-    setVouchers(response);
+    if (response) {
+      setVouchers(response.vouchers);
+      setPrintingError(response.error);
+    }
+  }
+
+  let errorMessage;
+  if (fetchError) {
+    errorMessage =  <ErrorMessage error={fetchError} type="error" />;
+  } else if (printingError) {
+    errorMessage = <ErrorMessage error={printingError} type="info"/>;
+  } else {
+    errorMessage = null;
+  }
+
+  const handleReset = () => {
+    setSelectedRoom(0);
+    setDuration(0);
+    setStageIndex(0);
+    setFetchError("");
+    setPrintingError("");
+    setVouchers([]);
+  }
+
+  const handleBack = () => {
+    setStageIndex(stageIndex - 1);
   }
 
   return (
     <div className={styles.container}>
       <Head>
-        <title>LOC - Voucher System</title>
+        <title>LOB - Voucher System</title>
         <meta name="description" content="" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.main}>
         <h1 className={styles.title}>Locanda Oca Bianca Voucher System</h1>
+        {errorMessage}
         {stage}
-        {vouchers.map((voucher) => {
-          return (
-            <div key={voucher.id}>
-              <h2>Voucher code for room {voucher.code}</h2>
-            </div>
-          );
-        })}
+        {vouchers?.length > 0
+          ? vouchers.map((voucher) => {
+              return (
+                <div key={voucher.id}>
+                  <Ticket code={voucher.code} />
+                </div>
+              );
+            })
+          : null}
+        <Stack direction="row" spacing={2} style={{margin : "2rem"}}>
+          {stageIndex != 0 && stageIndex != 2 ? <ArrowBackIcon fontSize="large" color="primary" onClick={() => handleBack()} /> : null}
+          {stageIndex != 0 ? <ClearIcon fontSize="large" color="warning" onClick={() => handleReset() } /> : null}
+        </Stack>
       </main>
     </div>
   );

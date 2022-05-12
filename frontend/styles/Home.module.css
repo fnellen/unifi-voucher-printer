@@ -85,6 +85,28 @@
   max-width: 300px;
 }
 
+.errorCard {
+  margin: 2rem;
+  padding: 0.5rem;
+  padding-left: 1rem;
+  text-align: left;
+  color: #000;
+  background-color: #ff7979;
+  border-radius: 10px;
+  font-size: 10pt;
+}
+
+.infoCard {
+  margin: 2rem;
+  padding: 0.5rem;
+  padding-left: 1rem;
+  text-align: left;
+  color: #000;
+  background-color: #f6e58d;
+  border-radius: 10px;
+  font-size: 10pt;
+}
+
 .card:hover,
 .card:focus,
 .card:active {

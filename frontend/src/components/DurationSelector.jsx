@@ -25,7 +25,7 @@ const DurationSelector = (props) => {
   };
   return (
     <>
-      <div className="container">
+      <div className={styles.container}>
         <h2>Select the duration</h2>
       </div>
       <div className={styles.grid}>
