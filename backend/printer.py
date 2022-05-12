@@ -76,12 +76,3 @@ class PrinterSpooler:
             stdout, stderr = process.communicate()
             if "Printing was successful" not in stdout.decode('utf-8') or "Printing was successful" not in stderr.decode('utf-8'):
                 raise SystemError(f"Printing failed for {voucher.id}")
-
-
-if __name__ == '__main__':
-    try:
-        spooler = PrinterSpooler(
-            'pyusb', 'QL-570', 'usb://0x04f9:0x2028', '62x29')
-        print(spooler.list_available_devices())
-    except:
-        print("No printer found")
