@@ -1,18 +1,15 @@
-from email.utils import localtime
 from PIL import Image, ImageDraw, ImageFont
 
 from uniFiVouchers import UniFiVoucher
-from datetime import datetime
-import tzlocal
-
 
 class ImgDrawer:
     width = 696
     height = 271
 
-    def __init__(self, uniFiVouchers: list[UniFiVoucher], ssid):
+    def __init__(self, uniFiVouchers: list[UniFiVoucher], ssid, gateCode):
         self.uniFiVouchers = uniFiVouchers
         self.ssid = ssid
+        self.gateCode = gateCode
 
     def drawVouchers(self):
         for voucher in self.uniFiVouchers:
@@ -21,30 +18,25 @@ class ImgDrawer:
     def drawVoucher(self, uniFiVoucher: UniFiVoucher):
         img1 = Image.new(mode="RGB", size=(
             self.width, self.height), color="white")
-        img2 = Image.open("img/voucherLayoutV2.png")
+        img2 = Image.open("img/voucherLayoutV3.png")
         img1.paste(img2, (0, 0))
         fntBold = ImageFont.truetype('fonts/Arial Bold.ttf', 60)
         fnt25pt = ImageFont.truetype('fonts/Arial.ttf', 25)
-        fnt20pt = ImageFont.truetype('fonts/Arial.ttf', 20)
         d = ImageDraw.Draw(img1)
+        #SSID
         d.text((133, 18), self.ssid, font=fnt25pt, fill=(0, 0, 0))
+        #ROOM
         d.text((502, 18), uniFiVoucher.note, font=fnt25pt, fill=(0, 0, 0))
-        d.text((64, 80), str(int(uniFiVoucher.duration / 1440)) + " Days",
-               font=fnt20pt, fill=(0, 0, 0))
-        d.text((64, 142), str(uniFiVoucher.speedUp) + " Kbps",
-               font=fnt20pt, fill=(0, 0, 0))
-        d.text((64, 205), str(uniFiVoucher.speedDown) + " Kbps",
-               font=fnt20pt, fill=(0, 0, 0))
-
-        d.text((219, 223), str(uniFiVoucher.usageQuota),
+        #DURATION
+        d.text((57, 223), str(int(uniFiVoucher.duration / 1440)) + " Days",
                font=fnt25pt, fill=(0, 0, 0))
-        localtimeZone = tzlocal.get_localzone()
-        d.text((334, 223), datetime.fromtimestamp(uniFiVoucher.creationTime, localtimeZone).strftime('%d.%m.%Y at %H:%M'),
+        #QUANTITY
+        d.text((206, 223), str(uniFiVoucher.usageQuota),
                font=fnt25pt, fill=(0, 0, 0))
 
         # https://github.com/python-pillow/Pillow/issues/5932
         gap = 5
-        tuple_var = (239, 105)
+        tuple_var = (158, 116)
         string_var = uniFiVoucher.code
         for char in string_var:
             d.text(tuple_var, char, (0, 0, 0), font=fntBold, align='center')
@@ -55,5 +47,5 @@ class ImgDrawer:
 
 if __name__ == '__main__':
     imgDrawer = ImgDrawer(
-        [UniFiVoucher({"_id": "1", "code": "1234567890", "duration": 4320, "quota": 2, "note": "102", "create_time": 1651831339, "qos_rate_max_up": "1000",  "qos_rate_max_down": "1000"})], "Locanda Oca Bianca")
+        [UniFiVoucher({"_id": "1", "code": "1234567890", "duration": 4320, "quota": 10, "note": "102", "create_time": 1651831339, "qos_rate_max_up": "1000",  "qos_rate_max_down": "1000"})], "Locanda Oca Bianca")
     imgDrawer.drawVouchers()

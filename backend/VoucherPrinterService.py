@@ -12,6 +12,7 @@ class VoucherPrinterService:
         self.devicePort = config('DEVICE_PORT')
         self.imgSize = config('IMG_SIZE')
         self.ssid = config('SSID')
+        self.gateCode = config('GATE_CODE')
         try:
             self.printer = PrinterSpooler(
                 self.bus, self.deviceModel, self.devicePort, self.imgSize)
@@ -29,12 +30,12 @@ class VoucherPrinterService:
         if len(voucherCreated) == 0:
             return False, []
         vouchers = self.client.retrieveVoucher(voucherCreated[0].creationTime)
-        imgDrawer = ImgDrawer(vouchers, self.ssid)
+        imgDrawer = ImgDrawer(vouchers, self.ssid, self.gateCode)
         imgDrawer.drawVouchers()
         if self.printer == None:
-            return False, "Printer not online", vouchers
+            return False, "Printer not online. Please write down the displayed code!", vouchers
         try:
             self.printer.printImgs(vouchers)
             return True, None, vouchers
         except:
-            return False, "Failed printing vouchers", vouchers
+            return False, "Failed printing vouchers. Please write down the displayed code!", vouchers
