@@ -18,6 +18,7 @@ class PrinterSpooler:
             raise ValueError("Not yet implemented other than QL-570")
         self.imgSize = imgSize
         self.dev = None
+        self.port = device_specifier
         if device_specifier.startswith('usb://'):
             device_specifier = device_specifier[6:]
             vendor_product, _, serial = device_specifier.partition('/')
@@ -26,7 +27,7 @@ class PrinterSpooler:
             for result in self.list_available_devices():
                 printer = result['instance']
                 if printer.idVendor == vendor and printer.idProduct == product or (serial and printer.iSerialNumber == serial):
-                    self.dev = printer["identifier"]
+                    self.dev = printer
                     break
             if self.dev is None:
                 raise ValueError('Device not found')
@@ -71,8 +72,8 @@ class PrinterSpooler:
 
     def printImgs(self, vouchers: list[UniFiVoucher]):
         for voucher in vouchers:
-            process = subprocess.Popen(['brother_ql', '-b', self.bus, '-m', self.deviceModel, '-p', self.dev, 'print', '-l', self.imgSize, f'tmp/{voucher.id}.png'],
+            process = subprocess.Popen(['brother_ql', '-b', self.bus, '-m', self.deviceModel, '-p', self.port, 'print', '-l', self.imgSize, f'tmp/{voucher.id}.png'],
                                        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             stdout, stderr = process.communicate()
-            if "Printing was successful" not in stdout.decode('utf-8') or "Printing was successful" not in stderr.decode('utf-8'):
+            if "Printing was successful" not in stdout.decode('utf-8') and "Printing was successful" not in stderr.decode('utf-8'):
                 raise SystemError(f"Printing failed for {voucher.id}")
