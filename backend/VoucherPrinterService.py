@@ -33,7 +33,7 @@ class VoucherPrinterService:
         imgDrawer = ImgDrawer(vouchers, self.ssid, self.gateCode)
         imgDrawer.drawVouchers()
         if self.printer == None:
-            return False, "Printer not online. Please write down the displayed code!", vouchers
+            return False, "Printer not online. Please write down the displayed code! Consider restarting the printing computer.", vouchers
         try:
             self.printer.printImgs(vouchers)
             return True, None, vouchers
