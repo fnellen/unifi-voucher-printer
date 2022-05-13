@@ -2,7 +2,7 @@ import { Stack } from "@mui/material";
 import Head from "next/head";
 import { useState } from "react";
 import DurationSelector from "../src/components/DurationSelector";
-import ErrorMessage from "../src/components/Errormessage";
+import ErrorMessage from "../src/components/ErrorMessage";
 import HotelroomSelector from "../src/components/HotelroomSelector";
 import PrintingNotice from "../src/components/PrintingNotice";
 import Ticket from "../src/components/Ticket";
