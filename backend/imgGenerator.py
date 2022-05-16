@@ -22,6 +22,7 @@ class ImgDrawer:
         img1.paste(img2, (0, 0))
         fntBold = ImageFont.truetype('fonts/Arial Bold.ttf', 60)
         fnt25pt = ImageFont.truetype('fonts/Arial.ttf', 30)
+        fnt25ptBold = ImageFont.truetype('fonts/Arial Bold.ttf', 30)
         d = ImageDraw.Draw(img1)
         #SSID
         d.text((146, 25), self.ssid, font=fnt25pt, fill=(0, 0, 0))
@@ -35,7 +36,7 @@ class ImgDrawer:
                font=fnt25pt, fill=(0, 0, 0))
         #GATE CODE
         d.text((452, 210), str(self.gateCode),
-               font=fnt25pt, fill=(0, 0, 0))
+               font=fnt25ptBold, fill=(0, 0, 0))
 
         # https://github.com/python-pillow/Pillow/issues/5932
         gap = 5
