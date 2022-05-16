@@ -18,28 +18,28 @@ class ImgDrawer:
     def drawVoucher(self, uniFiVoucher: UniFiVoucher):
         img1 = Image.new(mode="RGB", size=(
             self.width, self.height), color="white")
-        img2 = Image.open("img/voucherLayoutV3.png")
+        img2 = Image.open("img/voucherLayoutV4.png")
         img1.paste(img2, (0, 0))
         fntBold = ImageFont.truetype('fonts/Arial Bold.ttf', 60)
-        fnt25pt = ImageFont.truetype('fonts/Arial.ttf', 25)
+        fnt25pt = ImageFont.truetype('fonts/Arial.ttf', 30)
         d = ImageDraw.Draw(img1)
         #SSID
-        d.text((133, 18), self.ssid, font=fnt25pt, fill=(0, 0, 0))
+        d.text((146, 25), self.ssid, font=fnt25pt, fill=(0, 0, 0))
         #ROOM
-        d.text((502, 18), uniFiVoucher.note, font=fnt25pt, fill=(0, 0, 0))
+        d.text((588, 25), uniFiVoucher.note, font=fnt25pt, fill=(0, 0, 0))
         #DURATION
-        d.text((57, 225), str(int(uniFiVoucher.duration / 1440)) + " Days",
+        d.text((63, 210), str(int(uniFiVoucher.duration / 1440)) + " Days",
                font=fnt25pt, fill=(0, 0, 0))
         #QUANTITY
-        d.text((206, 225), str(uniFiVoucher.usageQuota),
+        d.text((234, 210), str(uniFiVoucher.usageQuota),
                font=fnt25pt, fill=(0, 0, 0))
         #GATE CODE
-        d.text((390, 225), str(self.gateCode),
+        d.text((452, 210), str(self.gateCode),
                font=fnt25pt, fill=(0, 0, 0))
 
         # https://github.com/python-pillow/Pillow/issues/5932
         gap = 5
-        tuple_var = (158, 116)
+        tuple_var = (158, 119)
         string_var = uniFiVoucher.code
         for char in string_var:
             d.text(tuple_var, char, (0, 0, 0), font=fntBold, align='center')
