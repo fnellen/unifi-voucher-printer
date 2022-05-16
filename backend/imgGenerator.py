@@ -28,10 +28,13 @@ class ImgDrawer:
         #ROOM
         d.text((502, 18), uniFiVoucher.note, font=fnt25pt, fill=(0, 0, 0))
         #DURATION
-        d.text((57, 223), str(int(uniFiVoucher.duration / 1440)) + " Days",
+        d.text((57, 225), str(int(uniFiVoucher.duration / 1440)) + " Days",
                font=fnt25pt, fill=(0, 0, 0))
         #QUANTITY
-        d.text((206, 223), str(uniFiVoucher.usageQuota),
+        d.text((206, 225), str(uniFiVoucher.usageQuota),
+               font=fnt25pt, fill=(0, 0, 0))
+        #GATE CODE
+        d.text((390, 225), str(self.gateCode),
                font=fnt25pt, fill=(0, 0, 0))
 
         # https://github.com/python-pillow/Pillow/issues/5932
@@ -47,5 +50,5 @@ class ImgDrawer:
 
 if __name__ == '__main__':
     imgDrawer = ImgDrawer(
-        [UniFiVoucher({"_id": "1", "code": "1234567890", "duration": 4320, "quota": 10, "note": "102", "create_time": 1651831339, "qos_rate_max_up": "1000",  "qos_rate_max_down": "1000"})], "Locanda Oca Bianca")
+        [UniFiVoucher({"_id": "1", "code": "1234567890", "duration": 4320, "quota": 10, "note": "102", "create_time": 1651831339, "qos_rate_max_up": "1000",  "qos_rate_max_down": "1000"})], "Locanda Oca Bianca", "2141414A")
     imgDrawer.drawVouchers()
