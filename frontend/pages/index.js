@@ -52,7 +52,7 @@ export default function Home() {
     };
     const minutes = duration * 60 * 24;
     const response = await fetch(
-      "http://192.168.1.77:5000/create-voucher?minutes=" +
+      "http://192.168.3.10:5000/create-voucher?minutes=" +
       minutes +
       "&count=1&quota=3&note=" +
       selectedRoom +
