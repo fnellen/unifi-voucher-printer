@@ -4,36 +4,36 @@ import { IconButton, TextField } from "@mui/material";
 import { useState } from "react";
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 
-const DurationSelector = (props) => {
-  const duration = [1, 2, 3, 4, 5];
+const QuantitySelector = (props) => {
+  const quantity = [1, 2, 3, 4, 5];
 
   const [error, setError] = useState(false);
   const [errorText, setErrorText] = useState("");
-  const [customDuration, setCustomDuration] = useState("");
+  const [customQuantity, setCustomQuantity] = useState("");
 
-  const handleDurationChange = (value) => {
-    props.deliverSelectedDuration(value);
+  const handleQuantityChange = (value) => {
+    props.deliverSelectedQuantity(value);
   };
 
-  const handleCustomDuration = () => {
-    if (customDuration > 5 && customDuration < 91 && customDuration != null) {
-      props.deliverSelectedDuration(customDuration);
+  const handleCustomQuantity = () => {
+    if (customQuantity > 5 && customQuantity < 11 && customQuantity != null) {
+      props.deliverSelectedQuantity(customQuantity);
     } else {
       setError(true);
-      setErrorText("Input not in rage 6 - 90");
+      setErrorText("Input not in rage 6 - 10");
     }
   };
   return (
     <>
       <div className={styles.container}>
-        <h2>Select the duration</h2>
+        <h2>Select the quantity of persons</h2>
       </div>
       <div className={styles.grid}>
-        {duration.map((day) => (
+        {quantity.map((day) => (
           <h2
             className={styles.card}
             key={day}
-            onClick={() => handleDurationChange(day)}
+            onClick={() => handleQuantityChange(day)}
           >
             {day}
           </h2>
@@ -54,10 +54,10 @@ const DurationSelector = (props) => {
             error={error}
             helperText={errorText}
             type="number"
-            onChange={(event) => setCustomDuration(event.target.value)}
+            onChange={(event) => setCustomQuantity(event.target.value)}
             InputProps={{
               endAdornment: (
-                <IconButton onClick={() => handleCustomDuration()}>
+                <IconButton onClick={() => handleCustomQuantity()}>
                   <ArrowRightAltIcon />
                 </IconButton>
               ),
@@ -69,4 +69,4 @@ const DurationSelector = (props) => {
   );
 };
 
-export default DurationSelector;
+export default QuantitySelector;

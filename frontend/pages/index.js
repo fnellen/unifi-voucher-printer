@@ -7,12 +7,14 @@ import HotelroomSelector from "../src/components/HotelroomSelector";
 import PrintingNotice from "../src/components/PrintingNotice";
 import Ticket from "../src/components/Ticket";
 import styles from "../styles/Home.module.css";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ClearIcon from '@mui/icons-material/Clear';
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ClearIcon from "@mui/icons-material/Clear";
+import QuantitySelector from "../src/components/QuantitySelector";
 
 export default function Home() {
   const [selectedRoom, setSelectedRoom] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [quantity, setQuantity] = useState(0);
   const [stageIndex, setStageIndex] = useState(0);
   const [fetchError, setFetchError] = useState("");
   const [printingError, setPrintingError] = useState("");
@@ -23,9 +25,14 @@ export default function Home() {
     setStageIndex(1);
   };
 
+  const handleQuantityChange = (value) => {
+    setQuantity(value);
+    setStageIndex(2);
+  };
+
   const handleDaysChange = (value) => {
     setDuration(value);
-    setStageIndex(2);
+    setStageIndex(3);
     submitVoucherRequest(selectedRoom, value);
   };
 
@@ -35,9 +42,14 @@ export default function Home() {
       stage = <HotelroomSelector deliverSelectedRoom={handleRoomChange} />;
       break;
     case 1:
-      stage = <DurationSelector deliverSelectedDuration={handleDaysChange} />;
+      stage = (
+        <QuantitySelector deliverSelectedQuantity={handleQuantityChange} />
+      );
       break;
     case 2:
+      stage = <DurationSelector deliverSelectedDuration={handleDaysChange} />;
+      break;
+    case 3:
       stage = <PrintingNotice selectedRoom={selectedRoom} days={duration} />;
       break;
   }
@@ -48,15 +60,17 @@ export default function Home() {
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
-      }
+      },
     };
     const minutes = duration * 60 * 24;
     const response = await fetch(
       "http://192.168.3.10:5000/create-voucher?minutes=" +
-      minutes +
-      "&count=1&quota=3&note=" +
-      selectedRoom +
-      "&up=5000&down=2000",
+        minutes +
+        "&count=" +
+        quantity +
+        "&quota=3&note=" +
+        selectedRoom +
+        "&up=5000&down=2000",
       requestOptions
     )
       .then((response) => {
@@ -70,7 +84,10 @@ export default function Home() {
         return data;
       })
       .catch((error) => {
-        setFetchError(error.message);
+        console.log(error);
+        setFetchError(
+          "Failed to connect to the printing server. Consider restarting the system."
+        );
       });
     if (response) {
       setVouchers(response.vouchers);
@@ -80,9 +97,9 @@ export default function Home() {
 
   let errorMessage;
   if (fetchError) {
-    errorMessage =  <ErrorMessage error={fetchError} type="error" />;
+    errorMessage = <ErrorMessage error={fetchError} type="error" />;
   } else if (printingError) {
-    errorMessage = <ErrorMessage error={printingError} type="info"/>;
+    errorMessage = <ErrorMessage error={printingError} type="info" />;
   } else {
     errorMessage = null;
   }
@@ -91,14 +108,15 @@ export default function Home() {
     setSelectedRoom(0);
     setDuration(0);
     setStageIndex(0);
+    setQuantity(0);
     setFetchError("");
     setPrintingError("");
     setVouchers([]);
-  }
+  };
 
   const handleBack = () => {
     setStageIndex(stageIndex - 1);
-  }
+  };
 
   return (
     <div className={styles.container}>
@@ -121,9 +139,21 @@ export default function Home() {
               );
             })
           : null}
-        <Stack direction="row" spacing={2} style={{margin : "2rem"}}>
-          {stageIndex != 0 && stageIndex != 2 ? <ArrowBackIcon fontSize="large" color="primary" onClick={() => handleBack()} /> : null}
-          {stageIndex != 0 ? <ClearIcon fontSize="large" color="warning" onClick={() => handleReset() } /> : null}
+        <Stack direction="row" spacing={2} style={{ margin: "2rem" }}>
+          {stageIndex != 0 && stageIndex != 2 ? (
+            <ArrowBackIcon
+              fontSize="large"
+              color="primary"
+              onClick={() => handleBack()}
+            />
+          ) : null}
+          {stageIndex != 0 ? (
+            <ClearIcon
+              fontSize="large"
+              color="warning"
+              onClick={() => handleReset()}
+            />
+          ) : null}
         </Stack>
       </main>
     </div>
