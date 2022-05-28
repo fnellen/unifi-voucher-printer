@@ -6,7 +6,7 @@ from flask_cors import CORS
 import os
 app = Flask(__name__)
 cors = CORS(app, resources={
-            r"/create-voucher/*": {"origins": "http://192.168.3.10:3000"}})
+            r"/*": {"origins": "http://192.168.3.10:3000"}})
 
 
 @app.route("/", methods=['GET'])

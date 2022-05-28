@@ -54,6 +54,39 @@ export default function Home() {
       break;
   }
 
+  async function printGateCode() {
+    const requestOptions = {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    const response = await fetch(
+      "http://192.168.3.10:5000/print-gate-code",
+      requestOptions
+    )
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        }
+        setFetchError("Something went wrong. Please check your connection.");
+        return;
+      })
+      .then((data) => {
+        return data;
+      })
+      .catch((error) => {
+        console.log(error);
+        setFetchError(
+          "Failed to connect to the printing server. Consider restarting the system."
+        );
+      });
+    if (response) {
+      setPrintingError(response.error);
+    }
+  }
+
   async function submitVoucherRequest(selectedRoom, duration) {
     const requestOptions = {
       method: "POST",
@@ -124,10 +157,18 @@ export default function Home() {
         <title>LOB - Voucher System</title>
         <meta name="description" content="" />
         <link rel="icon" href="/favicon.ico" />
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.css"
+        />
       </Head>
 
       <main className={styles.main}>
         <h1 className={styles.title}>Locanda Oca Bianca Voucher System</h1>
+        <button type="button" className={styles.slide} onClick={printGateCode}>
+          <div>Print Gate Code</div>
+          <i className="icon-arrow-right"></i>
+        </button>
         {errorMessage}
         {stage}
         {vouchers?.length > 0
