@@ -24,6 +24,17 @@ class VoucherPrinterService:
         except Exception as err:
             raise err
 
+    def printGateCode(self):
+        imgDrawer = ImgDrawer([], self.ssid, self.gateCode)
+        imgDrawer.drawGateCode()
+        if self.printer == None:
+            return False, "Printer not online. Please write down the displayed code! Consider restarting the printing computer."
+        try:
+            self.printer.printGateCode()
+            return True, None
+        except:
+            return False, "Failed printing gate code. Please write down the displayed code!"
+
     def printVouchers(self, minutes, count, quota, note, up=None, down=None, megabytes=None):
         voucherCreated = self.client.createVoucher(
             minutes=minutes, count=count, quota=quota, note=note, up=up, down=down, megabytes=megabytes)

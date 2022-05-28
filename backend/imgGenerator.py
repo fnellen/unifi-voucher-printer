@@ -15,6 +15,25 @@ class ImgDrawer:
         for voucher in self.uniFiVouchers:
             self.drawVoucher(voucher)
 
+    def drawGateCode(self):
+        img = Image.new(mode="RGB", size=(
+            self.width, self.height), color=(255, 255, 255))
+        backgroundImage = Image.open("img/gateCodeLayout.png")
+        img.paste(backgroundImage, (0, 0))
+        fntBold = ImageFont.truetype('fonts/Arial Bold.ttf', 60)
+        d = ImageDraw.Draw(img)
+
+        gap = 5
+        tuple_var = (227, 119)
+        string_var = str(self.gateCode)
+        for char in string_var:
+            d.text(tuple_var, char, (0, 0, 0), font=fntBold, align='center')
+            width = d.textsize(char, font=fntBold)[0] + gap
+            tuple_var = (tuple_var[0]+width, tuple_var[1])
+
+        img.save(f'tmp/gateCode.png')
+
+
     def drawVoucher(self, uniFiVoucher: UniFiVoucher):
         img1 = Image.new(mode="RGB", size=(
             self.width, self.height), color="white")
@@ -51,5 +70,6 @@ class ImgDrawer:
 
 if __name__ == '__main__':
     imgDrawer = ImgDrawer(
-        [UniFiVoucher({"_id": "1", "code": "1234567890", "duration": 4320, "quota": 10, "note": "102", "create_time": 1651831339, "qos_rate_max_up": "1000",  "qos_rate_max_down": "1000"})], "Locanda Oca Bianca", "2141414A")
-    imgDrawer.drawVouchers()
+        [UniFiVoucher({"_id": "1", "code": "1234567890", "duration": 4320, "quota": 10, "note": "102", "create_time": 1651831339, "qos_rate_max_up": "1000",  "qos_rate_max_down": "1000"})], "Locanda Oca Bianca", "19555A")
+    #imgDrawer.drawVouchers()
+    imgDrawer.drawGateCode()

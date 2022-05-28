@@ -14,6 +14,19 @@ def hello_world():
     return "<p>Hello, World!</p>"
 
 
+@app.route("/print-gate-code", methods=['POST'])
+def printGateCode():
+    voucherPrinterService = VoucherPrinterService()
+    successfull, message = voucherPrinterService.printGateCode()
+    resp = {}
+    if successfull:
+        resp["message"] = "Gate code printed successfully!"
+        return resp, 200
+    else:
+        resp["error"] = message
+        return resp, 500
+
+
 @app.route("/create-voucher", methods=["POST"])
 def createVoucher():
     if request.method == "POST":
@@ -43,6 +56,6 @@ def createVoucher():
                 resp["error"] = ErrorMessage
             return resp, 200
         except Exception as err:
-            return {"error": str(err), "vouchers" : []}, 500
+            return {"error": str(err), "vouchers": []}, 500
     else:
         abort(400)
