@@ -12,49 +12,22 @@ Sie soll nur innerhalb des internen Netzwerkes erreichbar sein.
 
 Die Anwendung soll zukünftige Erweiternungen ermöglichen können.
 
-Die Stakeholder sind die Rezeptionisten am Empfang des Hotels. Sie erstellen die Voucher beim Eintreffen der Gäste.
+Die Stakeholder sind die Rezeptionisten am Empfang des Hotels und der Entwickler Federico Nellen.
 
 ## Qualitätsziele 
 
 **Inhalt**
 
-Das System soll Zuverlässig Funktional und Wartbar sein. Darunter fällt:
+Das System soll zuverlässig, funktional und wartbar sein. Darunter fällt:
 
-1. Zuverlässigkeit: 
+1. Zuverlässigkeit: Das System erstellt bei vollständiger Eingabe der erforderlichen Daten einen Voucher. Sollte der Drucker nicht erreichbar sein, so wird er Zugangscode auf der Weboberfläche angezeigt und eine Warnung wird angezeigt. Nach Neustart des Systems soll ohne weitere Konfiguration das Drucken und Erstellen von Vouchern möglich sein.
+2. Funktionalität: Das System beschränkt sich auf die Erstellung und den Druck von Vouchern. Für den Nutzer soll dieser Prozess so einfach wie möglich gestaltet sein. Es soll keine Behinderung im Chek-In Prozess der Hotelgäste darstellen. 
 
+3. Wartbarkeit: Das System kann modifiziert werden, um es zu verbessern, korrigieren, oder an geänderte Bedürfnisse anzupassen.
 
-Die Top-3 bis Top-5 der Qualitätsanforderungen für die Architektur,
-deren Erfüllung oder Einhaltung den maßgeblichen Stakeholdern besonders
-wichtig sind. Gemeint sind hier wirklich Qualitätsziele, die nicht
-unbedingt mit den Zielen des Projekts übereinstimmen. Beachten Sie den
-Unterschied.
+## Stakeholder
 
-Hier ein Überblick möglicher Themen (basierend auf dem ISO 25010
-Standard):
-
-![Kategorien von
-Qualitätsanforderungen](images/01_2_iso-25010-topics-DE.drawio.png)
-
-::: formalpara-title
-**Motivation**
-:::
-
-Weil Qualitätsziele grundlegende Architekturentscheidungen oft
-maßgeblich beeinflussen, sollten Sie die für Ihre Stakeholder relevanten
-Qualitätsziele kennen, möglichst konkret und operationalisierbar.
-
-::: formalpara-title
-**Form**
-:::
-
-Tabellarische Darstellung der Qualitätsziele mit möglichst konkreten
-Szenarien, geordnet nach Prioritäten.
-
-## Stakeholder {#_stakeholder}
-
-::: formalpara-title
 **Inhalt**
-:::
 
 Expliziter Überblick über die Stakeholder des Systems -- über alle
 Personen, Rollen oder Organisationen --, die
@@ -86,19 +59,17 @@ von Ihnen zu leistenden Arbeit und Ergebnisse.
 Tabelle mit Rollen- oder Personennamen, sowie deren Erwartungshaltung
 bezüglich der Architektur und deren Dokumentation.
 
-+-----------------+-----------------+-----------------------------------+
-| Rolle           | Kontakt         | Erwartungshaltung                 |
-+=================+=================+===================================+
-| *\<Rolle-1>*    | *\<Kontakt-1>*  | *\<Erwartung-1>*                  |
-+-----------------+-----------------+-----------------------------------+
-| *\<Rolle-2>*    | *\<Kontakt-2>*  | *\<Erwartung-2>*                  |
-+-----------------+-----------------+-----------------------------------+
+| Rolle           | Kontakt            | Erwartungshaltung                 |
+------------------|--------------------|-----------------------------------|
+| Rezeption     | Carla           | Einfach zu bedienendes System, dass den Check-In Prozess nicht behindert.|
+| Entwickler    | Federico Nellen  | Wartbares und funktionales System, dass an neue Anforderungen angepasst werden kann.|
 
-# Randbedingungen {#section-architecture-constraints}
 
-::: formalpara-title
+# Randbedingungen
+
 **Inhalt**
-:::
+
+Das System verwendet das Python Paket [brother_ql](https://github.com/pklaus/brother_ql) zum drucken der virtuell erstellten Voucher. 
 
 Randbedingungen und Vorgaben, die ihre Freiheiten bezüglich Entwurf,
 Implementierung oder Ihres Entwicklungsprozesses einschränken. Diese
