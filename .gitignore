@@ -39,3 +39,7 @@ frontend/.env*.local
 
 # vercel
 frontend/.vercel
+
+images/
+
+UniFi Hotspot Manager/.obsidian/
