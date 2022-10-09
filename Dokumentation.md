@@ -70,75 +70,41 @@ bezüglich der Architektur und deren Dokumentation.
 **Inhalt**
 
 Das System verwendet das Python Paket [brother_ql](https://github.com/pklaus/brother_ql) zum drucken der virtuell erstellten Voucher. 
+Die Backend und Frontendanwendung soll als Docker-Container genutzt werden können. 
+Um Versionierung vorzunehmen, wird Git verwendet. 
+Das Projekt wird auf einem GitLab Server gesichert.
 
-Randbedingungen und Vorgaben, die ihre Freiheiten bezüglich Entwurf,
-Implementierung oder Ihres Entwicklungsprozesses einschränken. Diese
-Randbedingungen gelten manchmal organisations- oder firmenweit über die
-Grenzen einzelner Systeme hinweg.
+# Kontextabgrenzung
 
-::: formalpara-title
-**Motivation**
-:::
-
-Für eine tragfähige Architektur sollten Sie genau wissen, wo Ihre
-Freiheitsgrade bezüglich der Entwurfsentscheidungen liegen und wo Sie
-Randbedingungen beachten müssen. Sie können Randbedingungen vielleicht
-noch verhandeln, zunächst sind sie aber da.
-
-::: formalpara-title
-**Form**
-:::
-
-Einfache Tabellen der Randbedingungen mit Erläuterungen. Bei Bedarf
-unterscheiden Sie technische, organisatorische und politische
-Randbedingungen oder übergreifende Konventionen (beispielsweise
-Programmier- oder Versionierungsrichtlinien, Dokumentations- oder
-Namenskonvention).
-
-Siehe [Randbedingungen](https://docs.arc42.org/section-2/) in der
-online-Dokumentation (auf Englisch!).
-
-# Kontextabgrenzung {#section-system-scope-and-context}
-
-::: formalpara-title
 **Inhalt**
-:::
 
-Die Kontextabgrenzung grenzt das System gegen alle Kommunikationspartner
-(Nachbarsysteme und Benutzerrollen) ab. Sie legt damit die externen
-Schnittstellen fest und zeigt damit auch die Verantwortlichkeit (scope)
-Ihres Systems: Welche Verantwortung trägt das System und welche
-Verantwortung übernehmen die Nachbarsysteme?
+![Kontextabgrenzung](images/Kontextabgrenzung%20UniFi%20Voucher%20Manager.png)
 
-Differenzieren Sie fachlichen (Ein- und Ausgaben) und technischen
-Kontext (Kanäle, Protokolle, Hardware), falls nötig.
+Das System übernimmt die Verantwortung dem Nutzer eine Weboberfläche zu bieten. Es besitzt ein Frontend und ein Backend. Es findet keine Authentifizierung statt.
+Das Frontend macht Anfragen über HTTP an das Backend. Es nimmt Eingaben vom Nutzer entgegen.
+Das Backend kommuniziert mit dem Python Packet "brother_ql" über Programmaufruf mittels BASH. Dieses übernimmt die Kommunikation mit dem Etikettendrucker über USB. Ebenfalls kommuniziert das Backend über HTTP mit der UniFi OS Konsole um die Gäste-Vouchercodes zu generieren.
 
-::: formalpara-title
-**Motivation**
-:::
+## Fachlicher Kontext
 
-Die fachlichen und technischen Schnittstellen zur Kommunikation gehören
-zu den kritischsten Aspekten eines Systems. Stellen Sie sicher, dass Sie
-diese komplett verstanden haben.
-
-::: formalpara-title
-**Form**
-:::
-
-Verschiedene Optionen:
-
--   Diverse Kontextdiagramme
-
--   Listen von Kommunikationsbeziehungen mit deren Schnittstellen
-
-Siehe [Kontextabgrenzung](https://docs.arc42.org/section-3/) in der
-online-Dokumentation (auf Englisch!).
-
-## Fachlicher Kontext {#_fachlicher_kontext}
-
-::: formalpara-title
 **Inhalt**
-:::
+
+Kommunikationsbeziehungen:
+- Nutzer: 
+    - Eingabeschnittstellen: 
+    Frontend über HTTP. Der Nutzer sendet eine Anfrage an das Frontend mit den Informationen über den gewünschten Voucher (Länge des Aufenthalts in Minuten, Anzahl der Personen / Voucher, Zimmernummer bzw. Notiz, optional sind die Upload und Download Geschwindigkeiten)
+    - Ausgabeschnittstellen:
+    Frontend über HTTP. Dem Nutzer werden die angeforderten Voucher als Zahlencodes auf der Weboberfläche angezeigt. 
+    Etikett mit den Voucherinformationen.
+- Frontend:
+    - Eingabeschnittstellen:
+    HTTP Anfragen vom Nutzer. Das System übermittelt dem Nutzer die angeforderte Website. 
+    HTTP Antworten vom Backend. Vouchercodes und mögliche Fehlermeldungen.
+    - Ausgabeschnittstellen:
+    HTTP Anfragen an das Backend. Die vom Nutzer eingegebenen Informationen werden als Anfrage an das Backend gesendet.
+- Backend:
+    - Eingabeschnittstellen:
+    HTTP Anfragen vom Frontend. 
+    Antworten von der UniFi OS Konsole. 
 
 Festlegung **aller** Kommunikationsbeziehungen (Nutzer, IT-Systeme, ...)
 mit Erklärung der fachlichen Ein- und Ausgabedaten oder Schnittstellen.
