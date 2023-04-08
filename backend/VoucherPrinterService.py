@@ -27,7 +27,7 @@ class VoucherPrinterService:
     def printGateCode(self):
         imgDrawer = ImgDrawer([], self.ssid, self.gateCode)
         imgDrawer.drawGateCode()
-        if self.printer == None:
+        if self.printer is None:
             return False, "Printer not online. Please write down the displayed code! Consider restarting the printing computer."
         try:
             self.printer.printGateCode()
@@ -43,7 +43,7 @@ class VoucherPrinterService:
         vouchers = self.client.retrieveVoucher(voucherCreated[0].creationTime)
         imgDrawer = ImgDrawer(vouchers, self.ssid, self.gateCode)
         imgDrawer.drawVouchers()
-        if self.printer == None:
+        if self.printer is None:
             return False, "Printer not online. Please write down the displayed code! Consider restarting the printing computer.", vouchers
         try:
             self.printer.printImgs(vouchers)
