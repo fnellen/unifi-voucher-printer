@@ -58,7 +58,7 @@ def createVoucher():
             if not success:
                 resp["error"] = ErrorMessage
             return resp, 200
-        except Exception as err:
-            return {"error": str(err), "vouchers": []}, 500
+        except:
+            return {"error": "Internal server errror", "vouchers": []}, 500
     else:
         abort(400)
