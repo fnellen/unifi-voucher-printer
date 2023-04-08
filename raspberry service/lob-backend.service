@@ -1,0 +1,25 @@
+[Unit]
+Description=LOB Backend Voucher System
+After=multi-user.target
+
+[Service]
+Type=idle
+ExecStart=/usr/bin/python /home/fnellen/Unify-Hotspot-Manager/backend/server.py
+WorkingDirectory=/home/fnellen/Unify-Hotspot-Manager/backend
+Environment=USERNAME=
+Environment=PASSWORD=
+Environment=SSID=
+Environment=BUS=
+Environment=DEVICE_MODEL=
+Environment=DEVICE_PORT=
+Environment=IMG_SIZE=
+Environment=GATEWAY_IP=
+Environment=GATEWAY_PORT=
+Environment=FLASK_APP=
+Environment=FLASK_RUN_PORT=
+Environment=GATE_CODE=
+Environment="PATH=/home/***/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin"
+User=***
+
+[Install]
+WantedBy=multi-user.target

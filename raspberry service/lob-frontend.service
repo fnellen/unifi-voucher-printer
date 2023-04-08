@@ -1,0 +1,11 @@
+[Unit]
+Description=LOB Frontend Voucher Service
+After=network.target
+[Service]
+WorkingDirectory=/home/***/Unify-Hotspot-Manager/frontend
+ExecStart=/usr/bin/npm start
+Restart=on-failure
+User=***
+Environment=PORT=3000
+[Install]
+WantedBy=multi-user.target
