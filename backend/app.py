@@ -4,6 +4,7 @@ from VoucherPrinterService import VoucherPrinterService
 from flask import abort
 from flask_cors import CORS
 from decouple import config
+from werkzeug import secure_filename
 import os
 app = Flask(__name__)
 cors = CORS(app, resources={
@@ -52,7 +53,8 @@ def createVoucher():
             for v in vouchers:
                 resp["vouchers"].append(
                     v.toDict())
-                os.remove(f'tmp/{v.id}.png')
+                sf = secure_filename(f'tmp/{v.id}.png')
+                os.remove(sf)
             if not success:
                 resp["error"] = ErrorMessage
             return resp, 200
