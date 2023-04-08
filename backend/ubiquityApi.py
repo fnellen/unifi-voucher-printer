@@ -5,8 +5,7 @@ from uniFiVouchers import UniFiVoucher
 from decouple import config
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-# https://github.com/Art-of-WiFi/UniFi-API-client/blob/cbe89d913cc4dd3742d5fd35e201ec86bc8ccdc9/src/Client.php#L1919
-# https://rtyley.github.io/bfg-repo-cleaner/
+# Inspiered by: https://github.com/Art-of-WiFi/UniFi-API-client/blob/cbe89d913cc4dd3742d5fd35e201ec86bc8ccdc9/src/Client.php#L1919
 
 
 class UniFiClient:
@@ -47,11 +46,12 @@ class UniFiClient:
         except requests.exceptions.HTTPError as err:
             raise SystemExit(err)
 
-    """
+    def createVoucher(self, minutes: int, count: int, quota: int, note: str, up: int = None, down: int = None, megabytes: int = None):
+        """
      Create voucher(s)
-     
+
      NOTES: please use the retrieveVoucher() method/function to retrieve the newly created voucher(s) by create_time
-     
+
      @param int    minutes   minutes the voucher is valid after activation (expiration time)
      @param int    count     number of vouchers to create, default value is 1
      @param int    quota     single-use or multi-use vouchers, value '0' is for multi-use, '1' is for single-use,
@@ -63,8 +63,6 @@ class UniFiClient:
      @return array containing a single object which contains voucher createtime
      */
      """
-
-    def createVoucher(self, minutes: int, count: int, quota: int, note: str, up: int = None, down: int = None, megabytes: int = None):
         createVoucherUrl = f"proxy/network/api/s/default/cmd/hotspot"
         url = f"https://{self.gateway['ip']}:{self.gateway['port']}/{createVoucherUrl}"
         headers = {

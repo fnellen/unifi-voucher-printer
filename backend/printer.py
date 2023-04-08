@@ -7,7 +7,9 @@ import usb.util
 
 class PrinterSpooler:
 
-    def __init__(self, bus, deviceModel, device_specifier, imgSize):
+    def __init__(self, bus: str, deviceModel: str, device_specifier: str, imgSize: str):
+        """https://github.com/pklaus/brother_ql/blob/56cf4394ad750346c6b664821ccd7489ec140dae/brother_ql/backends/pyusb.py#L73
+        """
         if bus == 'pyusb':
             self.bus = bus
         else:
@@ -34,6 +36,7 @@ class PrinterSpooler:
 
     def list_available_devices(self):
         """
+        https://github.com/pklaus/brother_ql/blob/56cf4394ad750346c6b664821ccd7489ec140dae/brother_ql/backends/pyusb.py#L21
         List all available devices for the respective backend
 
         returns: devices: a list of dictionaries with the keys 'identifier' and 'instance': \
