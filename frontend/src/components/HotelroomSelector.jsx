@@ -4,8 +4,8 @@ import styles from "../../styles/Home.module.css";
 export default function HotelroomSelector(props) {
   const hotelrooms = [
     [1, 2, 3, 4, 5],
-    [101, 102, 103, 104, 105,106,107,108,109,110,111,112,113,114],
-    [201, 202, 203]
+    [101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114],
+    [201, 202, 203],
   ];
 
   const handleRoomChange = (value) => {
