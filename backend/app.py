@@ -3,10 +3,11 @@ from flask import request
 from VoucherPrinterService import VoucherPrinterService
 from flask import abort
 from flask_cors import CORS
+from decouple import config
 import os
 app = Flask(__name__)
 cors = CORS(app, resources={
-            r"/*": {"origins": "http://192.168.3.10:3000"}})
+            r"/*": {"origins": config('FRONTEND_URL', default="*")}})
 
 
 @app.route("/", methods=['GET'])

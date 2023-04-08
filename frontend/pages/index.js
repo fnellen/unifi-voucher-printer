@@ -19,6 +19,7 @@ export default function Home() {
   const [fetchError, setFetchError] = useState("");
   const [printingError, setPrintingError] = useState("");
   const [vouchers, setVouchers] = useState([]);
+  const printerServer = process.env.NEXT_PUBLIC_PRINTER_SERVER;
 
   const handleRoomChange = (value) => {
     setSelectedRoom(value);
@@ -63,7 +64,7 @@ export default function Home() {
       },
     };
     const response = await fetch(
-      "http://192.168.3.10:5000/print-gate-code",
+      printerServer + "/print-gate-code",
       requestOptions
     )
       .then((response) => {
@@ -97,7 +98,8 @@ export default function Home() {
     };
     const minutes = duration * 60 * 24;
     const response = await fetch(
-      "http://192.168.3.10:5000/create-voucher?minutes=" +
+      printerServer +
+        "/create-voucher?minutes=" +
         minutes +
         "&count=" +
         quantity +
