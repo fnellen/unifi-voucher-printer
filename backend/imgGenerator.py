@@ -2,6 +2,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 from uniFiVouchers import UniFiVoucher
 
+
 class ImgDrawer:
     width = 696
     height = 271
@@ -33,7 +34,6 @@ class ImgDrawer:
 
         img.save(f'tmp/gateCode.png')
 
-
     def drawVoucher(self, uniFiVoucher: UniFiVoucher):
         img1 = Image.new(mode="RGB", size=(
             self.width, self.height), color="white")
@@ -43,17 +43,17 @@ class ImgDrawer:
         fnt25pt = ImageFont.truetype('fonts/Arial.ttf', 30)
         fnt25ptBold = ImageFont.truetype('fonts/Arial Bold.ttf', 30)
         d = ImageDraw.Draw(img1)
-        #SSID
+        # SSID
         d.text((146, 25), self.ssid, font=fnt25pt, fill=(0, 0, 0))
-        #ROOM
+        # ROOM
         d.text((588, 25), uniFiVoucher.note, font=fnt25pt, fill=(0, 0, 0))
-        #DURATION
+        # DURATION
         d.text((63, 210), str(int(uniFiVoucher.duration / 1440)) + " Days",
                font=fnt25pt, fill=(0, 0, 0))
-        #QUANTITY
+        # QUANTITY
         d.text((234, 210), str(uniFiVoucher.usageQuota),
                font=fnt25pt, fill=(0, 0, 0))
-        #GATE CODE
+        # GATE CODE
         d.text((452, 210), str(self.gateCode),
                font=fnt25ptBold, fill=(0, 0, 0))
 
@@ -70,6 +70,6 @@ class ImgDrawer:
 
 if __name__ == '__main__':
     imgDrawer = ImgDrawer(
-        [UniFiVoucher({"_id": "1", "code": "1234567890", "duration": 4320, "quota": 10, "note": "102", "create_time": 1651831339, "qos_rate_max_up": "1000",  "qos_rate_max_down": "1000"})], "Locanda Oca Bianca", "19555A")
-    #imgDrawer.drawVouchers()
+        [UniFiVoucher({"_id": "1", "code": "64728937", "duration": 4320, "quota": 10, "note": "102", "create_time": 1651831339, "qos_rate_max_up": "1000",  "qos_rate_max_down": "1000"})], "Locanda Oca Bianca", "19555A")
+    # imgDrawer.drawVouchers()
     imgDrawer.drawGateCode()

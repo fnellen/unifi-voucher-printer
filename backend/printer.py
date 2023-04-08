@@ -80,7 +80,7 @@ class PrinterSpooler:
 
     def printGateCode(self):
         process = subprocess.Popen(['brother_ql', '-b', self.bus, '-m', self.deviceModel, '-p', self.port, 'print', '-l', self.imgSize, f'tmp/gateCode.png'],
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                                   stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = process.communicate()
         if "Printing was successful" not in stdout.decode('utf-8') and "Printing was successful" not in stderr.decode('utf-8'):
             raise SystemError(f"Printing failed gate code")
