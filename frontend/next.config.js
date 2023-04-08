@@ -19,15 +19,6 @@ const nextConfig = {
     });
     return config;
   },
-  async redirects() {
-    return [
-      {
-        source: "/docs",
-        destination: "/docs/welcome",
-        permanent: true,
-      },
-    ];
-  },
 };
 
 module.exports = nextConfig;
