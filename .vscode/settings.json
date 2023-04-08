@@ -1,6 +1,0 @@
-{
-    "eslint.workingDirectories": [
-        "./www/unifi-voucher-service"
-    ],
-    "eslint.packageManager": "npm"
-}
