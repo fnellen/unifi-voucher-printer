@@ -40,7 +40,7 @@ class UniFiClient:
             session = requests.Session()
             # login
             response = session.post(url, headers=headers,
-                                    data=json.dumps(body), verify=False)
+                                    data=json.dumps(body))
             # Get CSRF token from response headers
             return response.headers["X-CSRF-Token"], session
         except requests.exceptions.HTTPError as err:
@@ -81,10 +81,10 @@ class UniFiClient:
         }
         try:
             response = self.session.post(url, headers=headers,
-                                         data=json.dumps(body), verify=False)
+                                         data=json.dumps(body))
             api_data = response.json()
             vouchers = []
-            #vouchers = [UniFiVoucher(x) for x in api_data["data"]]
+            # vouchers = [UniFiVoucher(x) for x in api_data["data"]]
             for voucher in api_data["data"]:
                 vouchers.append(UniFiVoucher(voucher))
             return vouchers
@@ -103,7 +103,7 @@ class UniFiClient:
         }
         try:
             response = self.session.post(url, headers=headers,
-                                         data=json.dumps(body), verify=False)
+                                         data=json.dumps(body))
             api_data = response.json()
             vouchers = []
             for voucher in api_data["data"]:
@@ -123,7 +123,7 @@ class UniFiClient:
         }
         try:
             response = self.session.post(url, headers=headers,
-                                         data=json.dumps(body), verify=False)
+                                         data=json.dumps(body))
             api_data = response.json()
             vouchers = []
             for voucher in api_data["data"]:
@@ -145,7 +145,7 @@ class UniFiClient:
         }
         try:
             response = self.session.post(url, headers=headers,
-                                         data=json.dumps(body), verify=False)
+                                         data=json.dumps(body))
             if response.status_code == 200:
                 return True
             else:
