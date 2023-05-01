@@ -4,7 +4,7 @@ brother-ql==0.9.4
 certifi==2022.12.7
 charset-normalizer==2.0.12
 click==8.1.3
-Flask==2.1.2
+Flask==2.3.2
 Flask-Cors==3.0.10
 fpdf==1.7.2
 future==0.18.3
