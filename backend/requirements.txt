@@ -21,7 +21,7 @@ pyPdf==1.13
 python-decouple==3.6
 pytz-deprecation-shim==0.1.0.post0
 pyusb==1.2.1
-requests==2.27.1
+requests==2.31.0
 responses==0.20.0
 six==1.16.0
 toml==0.10.2
