@@ -27,7 +27,7 @@ six==1.16.0
 toml==0.10.2
 tzdata==2022.1
 tzlocal==4.2
-urllib3==1.26.18
+urllib3==1.26.19
 waitress==2.1.2
 Werkzeug==3.0.1
 zipp==3.8.0
