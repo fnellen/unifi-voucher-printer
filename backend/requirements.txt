@@ -15,7 +15,7 @@ Jinja2==3.1.4
 MarkupSafe==2.1.1
 packbits==0.6
 pdf2image==1.16.0
-Pillow==10.0.1
+Pillow==10.3.0
 pycodestyle==2.8.0
 pyPdf==3.17.0
 python-decouple==3.6
