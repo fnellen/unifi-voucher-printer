@@ -29,5 +29,5 @@ tzdata==2022.1
 tzlocal==4.2
 urllib3==1.26.19
 waitress==2.1.2
-Werkzeug==3.0.3
+Werkzeug==3.0.6
 zipp==3.19.1
